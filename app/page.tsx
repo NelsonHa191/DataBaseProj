@@ -128,13 +128,13 @@ const HomePage = () => {
         </div>
 
         {/* Floating Card Visual */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl opacity-20">
+        {/*<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl opacity-20">
           <img
             src="/api/placeholder/800/500"
             alt="Credit Card"
             className="w-full h-auto"
           />
-        </div>
+        </div>*/}
       </div>
 
       {/* Features Section */}
