@@ -73,7 +73,7 @@ const SignupPage = () => {
         router.push("/login?message=check-email");
       } else {
         alert("Registration successful!");
-        router.push("/login");
+        router.push("/onboarding");
       }
     } catch (err: any) {
       setError(err.message || "An error occurred during signup");

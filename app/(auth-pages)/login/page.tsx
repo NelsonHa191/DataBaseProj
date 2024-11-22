@@ -43,7 +43,7 @@ const LoginPage = () => {
         if (profileError) throw profileError;
 
         if (profileData) {
-          router.push("/dashboard");
+          router.push("/protected/dashboard");
           router.refresh();
         } else {
           throw new Error("Profile not found");
