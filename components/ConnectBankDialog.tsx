@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
     Dialog,
@@ -16,7 +14,7 @@ import {
   import { Label } from "@/components/ui/label";
   import { SubmitButton } from "@/components/submit-button";
 
-export default function ConnectBankDialog() {
+export default async function ConnectBankDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
