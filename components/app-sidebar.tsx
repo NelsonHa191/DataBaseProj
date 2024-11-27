@@ -27,38 +27,44 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { userInfoProps } from "@/types";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export function AppSidebar({ userInfo, ...props }: { userInfo: userInfoProps } & React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  userInfo,
+  ...props
+}: { userInfo: userInfoProps } & React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
   const data = {
     user: {
       name: userInfo.username,
       email: userInfo.email,
-      avatar: "/avatars/shadcn.jpg",
+      avatar: "",
     },
+
     navMain: [
       {
         title: "Navigation",
-        url: "#",
+        url: "",
         items: [
           {
             title: "Dashboard",
-            url: "#",
+            url: "dashboard",
             icon: LayoutDashboard,
-            isActive: true,
           },
           {
             title: "Transactions",
-            url: "#",
+            url: "transactions",
             icon: History,
           },
           {
             title: "Transfer money",
-            url: "#",
+            url: "transfer-money",
             icon: ArrowRightLeft,
           },
           {
             title: "Connect bank",
-            url: "#",
+            url: "connect-bank",
             icon: CreditCard,
           },
         ],
@@ -71,14 +77,14 @@ export function AppSidebar({ userInfo, ...props }: { userInfo: userInfoProps } &
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Eclipse className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Nova</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -94,11 +100,14 @@ export function AppSidebar({ userInfo, ...props }: { userInfo: userInfoProps } &
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname.includes(`${item.url}`)}
+                    >
+                      <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
