@@ -1,19 +1,8 @@
-import { signOutAction } from "@/actions/actions";
 import { AppSidebar } from "@/components/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import MainPageHeader from "@/components/MainPageHeader";
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -44,6 +33,7 @@ export default async function Layout({
     <SidebarProvider>
       <AppSidebar userInfo={userInfo} />
       <SidebarInset>
+        <MainPageHeader first_name={userInfo.first_name} />
         {children}
       </SidebarInset>
     </SidebarProvider>
