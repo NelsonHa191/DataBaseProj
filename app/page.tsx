@@ -53,7 +53,7 @@ const HomePage = () => {
               <a href="#" className="text-sm text-gray-300 hover:text-white">
                 Security
               </a>
-              <Link href="./login">
+              <Link href="./sign-in">
                 <Button
                   variant="ghost"
                   className="text-sm text-gray-300 hover:text-white"
