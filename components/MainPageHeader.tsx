@@ -29,13 +29,13 @@ export default function MainPageHeader({ first_name }: { first_name: string }) {
           </div>
         </header>
       );
-    case "/protected/connect-bank":
+    case "/protected/accounts":
       return (
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            Connect bank
+            Your accounts
           </div>
         </header>
       );

@@ -18,7 +18,7 @@ export default async function ConnectBankDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Connect bank</Button>
+        <Button variant="default">Connect bank</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -47,7 +47,7 @@ export default async function ConnectBankDialog() {
                 formAction={connectBankAction}
                 pendingText="Signing up..."
               >
-                Connect bank
+                Connect
               </SubmitButton>
             </DialogFooter>
           </div>

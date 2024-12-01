@@ -10,6 +10,7 @@ export const connectBankAction = async (formData: FormData) => {
     const routing = formData.get("routing") as string;
     const type = formData.get("type") as string;
     const balance = parseFloat((Math.random() * 10000).toFixed(2));
+
     console.log(institution, routing, type, balance);
 
     const supabase = await createClient();
