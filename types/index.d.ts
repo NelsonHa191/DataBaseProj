@@ -5,14 +5,24 @@ export type userInfoProps = {
   last_name: string;
 }
 
-export type accountProps = {
-  institution: string;
-  type: string;
-  routing: string;
-  balance: number;
-}
-
 export type chartDataProps = {
   date: string;
   balance: number;
 }
+
+export type Account = {
+  id: int;
+  user_id: string;
+  created_at: string;
+  routing: string;
+  institution: string;
+  type: string;
+  balance: number;
+};
+
+export type BalanceLog = {
+  account_id: int;
+  created_at: string;
+  old_balance: number;
+  new_balance: number;
+};
