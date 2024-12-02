@@ -1,19 +1,9 @@
-import AnimatedCounter from "@/components/AnimatedCounter";
 import { BalanceActivityChart } from "@/components/BalanceActivityChart";
 import { createClient } from "@/utils/supabase/server";
-import { ArrowDown, ArrowUp, TrendingDown } from "lucide-react";
 import { redirect } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import React from "react";
-import AccountCard from "@/components/AccountCard";
-import { Account } from "@/types";
+import TotalBalance from "@/components/TotalBalance";
+import Cashflow from "@/components/Cashflow";
+import AccountCarousel from "@/components/AccountCarousel";
 
 export default async function Dashboard() {
   const supabase = await createClient();
@@ -24,13 +14,13 @@ export default async function Dashboard() {
     return redirect("/sign-in");
   }
 
-  // fetches total balance of all accounts
+  // gets total balance of all accounts
   const { data: totalBalance, error: totalBalanceError } = await supabase.rpc(
     "fetch_total_balance",
     { u_id: user.id }
   );
 
-  // fetches this month's incoming money
+  // gets this month's incoming money
   const { data: moneyIn, error: moneyInError } = await supabase.rpc(
     "fetch_money_in",
     { u_id: user.id }
@@ -41,7 +31,7 @@ export default async function Dashboard() {
       (moneyIn[i].new_balance - moneyIn[i].old_balance).toFixed(2)
     );
   }
-
+  // gets this month's outgoing money
   const { data: moneyOut, error: moneyOutError } = await supabase.rpc(
     "fetch_money_out",
     { u_id: user.id }
@@ -55,7 +45,7 @@ export default async function Dashboard() {
   // calculates this months cashflow
   const cashflow = totalMoneyIn - totalMoneyOut;
 
-  // fetches user's accounts'
+  // gets user's accounts
   const { data: accounts, error: accountError } = await supabase.rpc(
     "fetch_user_accounts",
     { u_id: user.id }
@@ -65,61 +55,13 @@ export default async function Dashboard() {
     <>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
         <div className="grid auto-rows-min gap-4 lg:grid-cols-3 grid-cols-1">
-          <div className="flex flex-col h-full min-h-[180px] rounded-xl bg-muted/50 px-6 py-5 sm:py-6 shadow outline outline-muted/70">
-            <h1 className="text-black/80 leading-none tracking-tight">
-              Total balance
-            </h1>
-            <AnimatedCounter balance={totalBalance} />
-            <h2 className="text-sm text-muted-foreground mt-auto">
-              vs{" "}
-              <span className="text-black/80">
-                ${parseFloat((totalBalance + Math.abs(cashflow)).toFixed(2))}
-              </span>{" "}
-              last month{" "}
-              {cashflow >= 0 ? (
-                <ArrowUp size={10} className="inline-block text-green-500" />
-              ) : (
-                <ArrowDown size={10} className="inline-block text-red-500" />
-              )}
-            </h2>
-          </div>
-          <div className="flex flex-col h-full min-h-[180px] rounded-xl bg-muted/50 px-6 py-5 sm:py-6 shadow outline outline-muted/70">
-            <h1 className="text-black/80 leading-none tracking-tight">
-              Cashflow
-            </h1>
-            <AnimatedCounter
-              balance={cashflow}
-              thisMonth={true}
-              showTrendIcon={true}
-            />
-            <div className="flex flex-row mt-auto text-sm">
-              <p className="">
-                ${totalMoneyIn}{" "}
-                <span className="text-green-500">
-                  in <ArrowUp size={10} className="inline-block" />
-                </span>
-              </p>
-              <p className="ml-auto">
-                ${totalMoneyOut}{" "}
-                <span className="text-red-500">
-                  out <ArrowDown size={10} className="inline-block" />
-                </span>
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-col h-full bg-gradient-to-br from-muted/100 via-indigo-100 to-muted rounded-xl shadow outline outline-muted/70">
-            <Carousel className="w-full">
-              <CarouselContent>
-                {accounts.map((acc: Account) => (
-                  <CarouselItem key={acc.id}>
-                    <AccountCard acc={acc} carouselCard={true}/>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
+          <TotalBalance totalBalance={totalBalance} cashflow={cashflow} />
+          <Cashflow
+            totalMoneyIn={totalMoneyIn}
+            totalMoneyOut={totalMoneyOut}
+            cashflow={cashflow}
+          />
+          <AccountCarousel accounts={accounts} />
         </div>
         <div className="flex-1 rounded-xl bg-muted/50 lg:min-h-min shadow outline outline-muted/70">
           <BalanceActivityChart accounts={accounts} />
