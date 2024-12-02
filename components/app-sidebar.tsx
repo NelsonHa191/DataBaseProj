@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  Command,
   LayoutDashboard,
   ArrowRightLeft,
   History,
@@ -10,9 +9,6 @@ import {
   Eclipse,
 } from "lucide-react";
 
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -63,8 +59,8 @@ export function AppSidebar({
             icon: ArrowRightLeft,
           },
           {
-            title: "Connect bank",
-            url: "connect-bank",
+            title: "Accounts",
+            url: "accounts",
             icon: CreditCard,
           },
         ],
@@ -78,11 +74,11 @@ export function AppSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Eclipse className="size-4" />
+                <div className="flex aspect-square size-6 items-center justify-center rounded-lg text-sidebar-primary-foreground">
+                  <Eclipse className="size-6 text-sidebar-primary" strokeWidth={2.5}/>
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Nova</span>
+                <div className="flex-1 text-left text-sm leading-tight">
+                  <span className="truncate tracking-tighter text-lg">Nova</span>
                 </div>
               </Link>
             </SidebarMenuButton>

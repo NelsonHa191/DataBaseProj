@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import {
     Dialog,
@@ -14,11 +16,11 @@ import {
   import { Label } from "@/components/ui/label";
   import { SubmitButton } from "@/components/submit-button";
 
-export default async function ConnectBankDialog() {
+export default function ConnectBankDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Connect bank</Button>
+        <Button variant="default">Connect bank</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -47,7 +49,7 @@ export default async function ConnectBankDialog() {
                 formAction={connectBankAction}
                 pendingText="Signing up..."
               >
-                Connect bank
+                Connect
               </SubmitButton>
             </DialogFooter>
           </div>

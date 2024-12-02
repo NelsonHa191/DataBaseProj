@@ -29,23 +29,24 @@ export default function MainPageHeader({ first_name }: { first_name: string }) {
           </div>
         </header>
       );
-    case "/protected/connect-bank":
+    case "/protected/accounts":
       return (
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            Connect bank
+            Your accounts
           </div>
         </header>
       );
     default:
       return (
         <header className="flex h-16 shrink-0 items-center gap-2">
-          <div className="flex items-center gap-2 px-4">
+          <div className="flex items-center gap-2 px-4 w-full">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
             Welcome back, {first_name}
+            <p className="text-sm text-muted-foreground ml-auto mr-2">{new Date().toDateString()}</p>
           </div>
         </header>
       );
