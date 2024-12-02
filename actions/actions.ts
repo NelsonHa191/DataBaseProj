@@ -4,6 +4,23 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { BalanceLog } from "@/types";
+
+export const getAccountChartAction = async (a_id: number) => {
+    const supabase = await createClient();
+   
+    const { data, error } = await supabase.rpc('fetch_balance_logs', { a_id: a_id });
+    let balance_log = data;
+
+   const chartData = balance_log ? balance_log.map((log: BalanceLog) => {
+      return {
+        date: log.created_at.slice(0, 10),
+        balance: log.new_balance,
+      };
+    }) : [];
+
+    return chartData;
+}
 
 export const connectBankAction = async (formData: FormData) => {
     const institution = formData.get("institution") as string;

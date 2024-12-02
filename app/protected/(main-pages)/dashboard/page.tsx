@@ -1,8 +1,19 @@
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { BalanceActivityChart } from "@/components/BalanceActivityChart";
 import { createClient } from "@/utils/supabase/server";
+import { ArrowDown, ArrowUp, TrendingDown } from "lucide-react";
 import { redirect } from "next/navigation";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import React from "react";
+import AccountCard from "@/components/AccountCard";
+import { Account } from "@/types";
 
 export default async function Dashboard() {
   const supabase = await createClient();
@@ -19,16 +30,12 @@ export default async function Dashboard() {
     { u_id: user.id }
   );
 
-  // fetches last month's total balance
-  const { data: lastMonthBalance, error: lastMonthBalanceError } =
-    await supabase.rpc("fetch_last_month", { u_id: user.id });
-
   // fetches this month's incoming money
   const { data: moneyIn, error: moneyInError } = await supabase.rpc(
     "fetch_money_in",
     { u_id: user.id }
   );
-  let totalMoneyIn = 0;
+  let totalMoneyIn = 0.0;
   for (let i = 0; i < moneyIn.length; i++) {
     totalMoneyIn += parseFloat(
       (moneyIn[i].new_balance - moneyIn[i].old_balance).toFixed(2)
@@ -39,75 +46,83 @@ export default async function Dashboard() {
     "fetch_money_out",
     { u_id: user.id }
   );
-  let totalMoneyOut = 0;
+  let totalMoneyOut = 0.0;
   for (let i = 0; i < moneyOut.length; i++) {
     totalMoneyOut += Math.abs(
       parseFloat((moneyOut[i].new_balance - moneyOut[i].old_balance).toFixed(2))
     );
   }
+  // calculates this months cashflow
+  const cashflow = totalMoneyIn - totalMoneyOut;
 
-  // fetches user's accounts' balance logs over the last 3 months
-  const { data: balanceLogs, error: balanceLogsError } = await supabase.rpc("fetch_balance_logs", { u_id: user.id });
-  console.log(balanceLogs); 
-
-  const chartData = balanceLogs ? balanceLogs.map((log) => {
-    return {
-      date: log.created_at.slice(0, 10),
-      balance: log.new_balance,
-    };
-  }) : [];
-
-  // Turn this into a sql query to get all the user's balance logs (join accounts and balance_log)
-  //   let balance_log = null;
-  //   if (account) {
-  //     const { data, error } = await supabase
-  //       .from("balance_log")
-  //       .select()
-  //       .eq("account_id", account[0].id)
-  //       .order("created_at")
-  //     balance_log = data;
-  //   }
-
-  //  const chartData = balance_log ? balance_log.map((log) => {
-  //     return {
-  //       date: log.created_at.slice(0, 10),
-  //       balance: log.new_balance,
-  //     };
-  //   }) : [];
+  // fetches user's accounts'
+  const { data: accounts, error: accountError } = await supabase.rpc(
+    "fetch_user_accounts",
+    { u_id: user.id }
+  );
 
   return (
     <>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className="grid auto-rows-min gap-4 lg:grid-cols-3">
-          <div className="flex flex-col rounded-xl bg-muted/50 px-6 py-5 sm:py-6 shadow outline outline-muted/70 lg:col-span-2 h-full">
+        <div className="grid auto-rows-min gap-4 lg:grid-cols-3 grid-cols-1">
+          <div className="flex flex-col h-full min-h-[180px] rounded-xl bg-muted/50 px-6 py-5 sm:py-6 shadow outline outline-muted/70">
             <h1 className="text-black/80 leading-none tracking-tight">
               Total balance
             </h1>
             <AnimatedCounter balance={totalBalance} />
-            <h2 className="text-sm text-muted-foreground mt-4">
-              Down ${totalBalance - lastMonthBalance[0].new_balance} from last
-              month
+            <h2 className="text-sm text-muted-foreground mt-auto">
+              vs{" "}
+              <span className="text-black/80">
+                ${parseFloat((totalBalance + Math.abs(cashflow)).toFixed(2))}
+              </span>{" "}
+              last month{" "}
+              {cashflow >= 0 ? (
+                <ArrowUp size={10} className="inline-block text-green-500" />
+              ) : (
+                <ArrowDown size={10} className="inline-block text-red-500" />
+              )}
             </h2>
           </div>
-          <div className="flex flex-col h-full  rounded-xl bg-muted/50 px-6 py-5 sm:py-6 shadow outline outline-muted/70">
+          <div className="flex flex-col h-full min-h-[180px] rounded-xl bg-muted/50 px-6 py-5 sm:py-6 shadow outline outline-muted/70">
             <h1 className="text-black/80 leading-none tracking-tight">
               Cashflow
             </h1>
-            <AnimatedCounter balance={totalMoneyIn - totalMoneyOut} />
-            <div className="flex flex-col lg:flex-row mt-4 text-sm">
+            <AnimatedCounter
+              balance={cashflow}
+              thisMonth={true}
+              showTrendIcon={true}
+            />
+            <div className="flex flex-row mt-auto text-sm">
               <p className="">
                 ${totalMoneyIn}{" "}
-                <span className="text-muted-foreground">in</span>
+                <span className="text-green-500">
+                  in <ArrowUp size={10} className="inline-block" />
+                </span>
               </p>
-              <p className="lg:ml-auto">
+              <p className="ml-auto">
                 ${totalMoneyOut}{" "}
-                <span className="text-muted-foreground">out</span>
+                <span className="text-red-500">
+                  out <ArrowDown size={10} className="inline-block" />
+                </span>
               </p>
             </div>
           </div>
+          <div className="flex flex-col h-full bg-gradient-to-br from-muted/100 via-indigo-100 to-muted rounded-xl shadow outline outline-muted/70">
+            <Carousel className="w-full">
+              <CarouselContent>
+                {accounts.map((acc: Account) => (
+                  <CarouselItem key={acc.id}>
+                    <AccountCard acc={acc} carouselCard={true}/>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
         </div>
         <div className="flex-1 rounded-xl bg-muted/50 lg:min-h-min shadow outline outline-muted/70">
-          <BalanceActivityChart chartData={chartData}/>
+          <BalanceActivityChart accounts={accounts} />
         </div>
         <div className="flex-1 rounded-xl bg-muted/50 lg:min-h-min px-6 py-5 sm:py-6 shadow outline outline-muted/70">
           <h1 className="text-black/80 leading-none tracking-tight">

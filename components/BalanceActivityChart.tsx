@@ -5,8 +5,6 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  Line,
-  LineChart,
   XAxis,
   YAxis,
 } from "recharts";
@@ -21,12 +19,19 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { chartDataProps } from "@/types";
+import { Account, chartDataProps } from "@/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { getAccountChartAction } from "@/actions/actions";
+import { useEffect } from "react";
 
 const chartConfig = {
   desktop: {
@@ -35,28 +40,22 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function BalanceActivityChart({
-  chartData,
-}: {
-  chartData: chartDataProps[];
-}) {
-  const [timeRange, setTimeRange] = React.useState("90d");
+export function BalanceActivityChart({ accounts }: { accounts: Account[] }) {
+  const [timeRange, setTimeRange] = React.useState("90d")
+  const [currentChart, setCurrentChart] = React.useState(accounts[0].id);
+  const [chartData, setChartData] = React.useState<chartDataProps[]>([]);
+  useEffect(() => {
+    getAccountChartAction(currentChart).then(setChartData);
+  }, [currentChart]);
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date(item.date);
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
-    }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
-
-  console.log(chartData);
+  // const chartData = [
+  //   {date: "2024-01-01", balance: 121},
+  //   {date: "2024-02-01", balance: 2424},
+  //   {date: "2024-03-01", balance: 3434},
+  //   {date: "2024-04-01", balance: 232},
+  //   {date: "2024-05-01", balance: 5455},
+  //   {date: "2024-06-01", balance: 55},
+  // ]
 
   return (
     <Card>
@@ -67,32 +66,28 @@ export function BalanceActivityChart({
             Showing balance activity for the last 3 months
           </CardDescription>
         </div>
-        {/* <Select value={timeRange} onValueChange={setTimeRange}>
+        <Select value={currentChart} onValueChange={setCurrentChart}>
           <SelectTrigger
             className="w-[160px] rounded-lg sm:ml-auto"
-            aria-label="Select a value"
+            aria-label="Select an account"
           >
-            <SelectValue placeholder="Last 3 months" />
+            <SelectValue placeholder="Select account" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
-            <SelectItem value="90d" className="rounded-lg">
-              Last 3 months
-            </SelectItem>
-            <SelectItem value="30d" className="rounded-lg">
-              Last 30 days
-            </SelectItem>
-            <SelectItem value="7d" className="rounded-lg">
-              Last 7 days
-            </SelectItem>
+            {accounts.map((acc: Account) => (
+              <SelectItem key={acc.id} value={acc.id} className="rounded-lg">
+                {acc.institution} {acc.type}
+              </SelectItem>
+            ))}
           </SelectContent>
-        </Select> */}
+        </Select>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:pr-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart data={chartData}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -122,7 +117,7 @@ export function BalanceActivityChart({
                 });
               }}
             />
-            <YAxis tickLine={false} axisLine={false} tickMargin={16}/>
+            <YAxis tickLine={false} axisLine={false} tickMargin={16} />
             <ChartTooltip
               cursor={false}
               content={
