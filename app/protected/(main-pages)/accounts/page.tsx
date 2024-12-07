@@ -25,7 +25,7 @@ export default async function Accounts() {
           {account?.map((acc: Account) => (
             <AccountCard acc={acc} key={acc.id}/>
           ))}
-          <div className="aspect-video space-y-2 flex justify-center items-center flex-col rounded-xl bg-transparent shadow outline outline-muted/70">
+          <div className="min-h-[300px] space-y-2 flex justify-center items-center flex-col rounded-xl bg-transparent shadow outline outline-muted/70">
             <h1 className="text-black/80 leading-none tracking-tight">
               Add an account
             </h1>
