@@ -120,3 +120,127 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/sign-in");
 };
+
+export const transferMoneyAction = async (formData: FormData) => {
+  const supabase = await createClient();
+  const fromAccountId = parseInt(formData.get("from_account_id") as string);
+  const toRoutingNumber = formData.get("to_routing_number") as string;
+  const amount = parseFloat(formData.get("amount") as string);
+
+  // 1. Validate the user's identity and account ownership
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return redirect("/sign-in");
+  }
+
+  // 2. Retrieve the details of the "from" and "to" accounts
+  const { data: fromAccount, error: fromAccountError } = await supabase
+    .from("accounts")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("id", fromAccountId)
+    .single();
+
+  if (fromAccountError || !fromAccount) {
+    return { error: "Invalid 'from' account." };
+  }
+
+  const { data: toAccount, error: toAccountError } = await supabase
+    .from("accounts")
+    .select("*")
+    .eq("routing", toRoutingNumber)
+    .single();
+
+  if (toAccountError || !toAccount) {
+    return { error: "Invalid recipient account." };
+  }
+
+  // 3. Check if the "from" account has sufficient balance
+  if (fromAccount.balance < amount) {
+    return { error: "Insufficient funds in your account." };
+  }
+
+  // 4. Update the balances of both the "from" and "to" accounts
+  const { error: deductError } = await supabase
+    .from("accounts")
+    .update({ balance: fromAccount.balance - amount })
+    .eq("id", fromAccountId);
+
+  if (deductError) {
+    return { error: "Failed to deduct money from your account." };
+  }
+
+  const { error: addError } = await supabase
+    .from("accounts")
+    .update({ balance: toAccount.balance + amount })
+    .eq("id", toAccount.id);
+
+  if (addError) {
+    return { error: "Failed to add money to the recipient account." };
+  }
+
+  // 5. Log the transaction for auditing purposes (optional)
+  await supabase.from("transactions").insert({
+    from_account_id: fromAccountId,
+    to_account_id: toAccount.id,
+    amount: amount,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Return a success response or redirect after successful transfer
+  return redirect("/protected/dashboard");
+};
+
+export const fetchBalanceLogs = async (accountIds: number[]) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc('fetch_balance_logs', { a_id: accountIds });
+  return { data, error };
+};
+
+export const filterTransactions = async (
+  userId: string,
+  institution: string,
+  dateRange: string
+) => {
+  const supabase = await createClient();
+  
+  let query = supabase
+    .from('balance_log')
+    .select(`
+      account_id,
+      created_at,
+      old_balance,
+      new_balance,
+      accounts!inner (
+        institution,
+        routing,
+        user_id
+      )
+    `)
+    .eq('accounts.user_id', userId)
+    .order('created_at', { ascending: false });
+
+  // Add institution filter if selected
+  if (institution) {
+    query = query.eq('accounts.institution', institution);
+  }
+
+  // Add date range filter if selected
+  if (dateRange) {
+    const days = parseInt(dateRange);
+    const fromDate = new Date();
+    fromDate.setDate(fromDate.getDate() - days);
+    query = query.gte('created_at', fromDate.toISOString());
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error('Error filtering transactions:', error);
+    return { error };
+  }
+
+  return { data };
+
+  
+};

@@ -26,3 +26,4 @@ export type BalanceLog = {
   old_balance: number;
   new_balance: number;
 };
+
