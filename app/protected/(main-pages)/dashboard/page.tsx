@@ -27,9 +27,7 @@ export default async function Dashboard() {
   );
   let totalMoneyIn = 0.0;
   for (let i = 0; i < moneyIn.length; i++) {
-    totalMoneyIn += parseFloat(
-      (moneyIn[i].new_balance - moneyIn[i].old_balance).toFixed(2)
-    );
+    totalMoneyIn += moneyIn[i].new_balance - moneyIn[i].old_balance;
   }
   // gets this month's outgoing money
   const { data: moneyOut, error: moneyOutError } = await supabase.rpc(
@@ -39,7 +37,7 @@ export default async function Dashboard() {
   let totalMoneyOut = 0.0;
   for (let i = 0; i < moneyOut.length; i++) {
     totalMoneyOut += Math.abs(
-      parseFloat((moneyOut[i].new_balance - moneyOut[i].old_balance).toFixed(2))
+      moneyOut[i].new_balance - moneyOut[i].old_balance
     );
   }
   // calculates this months cashflow

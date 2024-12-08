@@ -14,7 +14,7 @@ export default function AccountCard({ acc, carouselCard = false }: {acc: Account
       <p>{acc.routing}</p>
       <div className="mt-auto flex flex-row items-center">
         <p className="text-2xl xl:text-4xl">
-          ${acc.balance}{" "}
+          ${acc.balance.toFixed(2)}{" "}
           <span className="text-sm text-muted-foreground">balance</span>
         </p>
         <p className="ml-auto">ID: {acc.id}</p>
