@@ -31,3 +31,15 @@ export type LeaderboardUser = {
   username: string;
   totalNetGainLoss: number;
 };
+
+export interface Transaction {
+  account_id: string;
+  created_at: string;
+  old_balance: number | null;
+  new_balance: number;
+  accounts: {
+    institution: string;
+    routing: string;
+    user_id: string;
+  };
+}

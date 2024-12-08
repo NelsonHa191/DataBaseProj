@@ -28,13 +28,13 @@ export const connectBankAction = async (formData: FormData) => {
     const type = formData.get("type") as string;
     const balance = parseFloat((Math.random() * 10000).toFixed(2));
 
-    console.log(institution, routing, type, balance);
+    // console.log(institution, routing, type, balance);
 
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    console.log(user);
+    // console.log(user);
     if (!user) {
       return redirect("/sign-in");
     }

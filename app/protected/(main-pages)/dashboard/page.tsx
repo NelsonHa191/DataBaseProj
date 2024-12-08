@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import TotalBalance from "@/components/TotalBalance";
 import Cashflow from "@/components/Cashflow";
 import AccountCarousel from "@/components/AccountCarousel";
+import { Transaction } from "@/types";
+import TransactionHistory from "@/components/TransactionHistory";
 
 export default async function Dashboard() {
   const supabase = await createClient();
@@ -49,6 +51,24 @@ export default async function Dashboard() {
     { u_id: user.id }
   );
 
+  const { data: transactions, error } = await supabase
+    .from("balance_log")
+    .select(
+      `
+      account_id,
+      created_at,
+      old_balance,
+      new_balance,
+      accounts!inner (
+        institution,
+        routing,
+        user_id
+      )
+    `
+    )
+    .eq("accounts.user_id", user.id)
+    .order("created_at", { ascending: false });
+
   return (
     <>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
@@ -68,6 +88,10 @@ export default async function Dashboard() {
           <h1 className="text-black/80 leading-none tracking-tight">
             Recent transactions
           </h1>
+          <TransactionHistory
+            initialTransactions={transactions as Transaction[]}
+            userId={user.id}
+          />
         </div>
       </div>
     </>
