@@ -26,3 +26,8 @@ export type BalanceLog = {
   old_balance: number;
   new_balance: number;
 };
+
+export type LeaderboardUser = {
+  username: string;
+  totalNetGainLoss: number;
+};
