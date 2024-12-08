@@ -129,7 +129,7 @@ export default function TransactionHistory({
                   <TableCell>${transaction.new_balance.toFixed(2)}</TableCell>
                   <TableCell className={change ? changeColor : ""}>
                     {change
-                      ? `${change > 0 ? "+" : ""}$${Math.abs(change).toFixed(
+                      ? `${change > 0 ? "+" : "-"}$${Math.abs(change).toFixed(
                           2
                         )}`
                       : "N/A"}

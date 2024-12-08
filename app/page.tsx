@@ -34,7 +34,6 @@ const HomePage = () => {
       >
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-tr from-gray-700 to-gray-500 rounded-full flex items-center justify-center">
                 <span className="text-lg font-bold">N</span>
@@ -42,7 +41,6 @@ const HomePage = () => {
               <span className="text-xl font-medium">Nova</span>
             </div>
 
-            {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               <a href="#" className="text-sm text-gray-300 hover:text-white">
                 Cards
@@ -63,7 +61,6 @@ const HomePage = () => {
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
             <button
               className="md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -78,7 +75,6 @@ const HomePage = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
       <div
         className={`
         fixed inset-0 bg-black/95 backdrop-blur-lg z-40 transition-transform duration-300 ease-in-out
@@ -100,12 +96,9 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Hero Section */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black"></div>
 
-        {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-200 to-white text-transparent bg-clip-text">
             Banking Reimagined
@@ -126,15 +119,6 @@ const HomePage = () => {
             </Button>
           </div>
         </div>
-
-        {/* Floating Card Visual */}
-        {/*<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl opacity-20">
-          <img
-            src="/api/placeholder/800/500"
-            alt="Credit Card"
-            className="w-full h-auto"
-          />
-        </div>*/}
       </div>
 
       {/* Features Section */}
@@ -199,9 +183,9 @@ const HomePage = () => {
               </Button>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden">
+              <div className="aspect-square bg-gradient-to-br from-gray-300 to-gray-900 rounded-2xl overflow-hidden">
                 <img
-                  src="/api/placeholder/600/600"
+                  src="/card.jpg"
                   alt="Premium Card"
                   className="w-full h-full object-cover mix-blend-overlay"
                 />
