@@ -7,6 +7,7 @@ import {
   History,
   CreditCard,
   Eclipse,
+  ChartNoAxesColumn,
 } from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
@@ -63,6 +64,11 @@ export function AppSidebar({
             url: "accounts",
             icon: CreditCard,
           },
+          {
+            title: "Leaderboard",
+            url: "leaderboard",
+            icon: ChartNoAxesColumn,
+          },
         ],
       },
     ],
@@ -75,10 +81,15 @@ export function AppSidebar({
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
                 <div className="flex aspect-square size-6 items-center justify-center rounded-lg text-sidebar-primary-foreground">
-                  <Eclipse className="size-6 text-sidebar-primary" strokeWidth={2.5}/>
+                  <Eclipse
+                    className="size-6 text-sidebar-primary"
+                    strokeWidth={2.5}
+                  />
                 </div>
                 <div className="flex-1 text-left text-sm leading-tight">
-                  <span className="truncate tracking-tighter text-lg">Nova</span>
+                  <span className="truncate tracking-tighter text-lg">
+                    Nova
+                  </span>
                 </div>
               </Link>
             </SidebarMenuButton>
