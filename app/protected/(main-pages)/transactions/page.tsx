@@ -2,18 +2,7 @@ import React from "react";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import TransactionHistory from "@/components/TransactionHistory";
-
-interface Transaction {
-  account_id: string;
-  created_at: string;
-  old_balance: number | null;
-  new_balance: number;
-  accounts: {
-    institution: string;
-    routing: string;
-    user_id: string;
-  };
-}
+import { Transaction } from "@/types";
 
 export default async function TransactionsPage() {
   const supabase = await createClient();
@@ -49,11 +38,13 @@ export default async function TransactionsPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
-      <TransactionHistory
-        initialTransactions={transactions as Transaction[]}
-        userId={user.id}
-      />
+    <div className="flex flex-col gap-4 p-4 pt-0">
+      <div className="rounded-xl bg-muted/50 lg:min-h-min px-6 py-5 sm:py-6 shadow outline outline-muted/70">
+        <TransactionHistory
+          initialTransactions={transactions as Transaction[]}
+          userId={user.id}
+        />
+      </div>
     </div>
   );
 }

@@ -66,8 +66,7 @@ export default function TransactionHistory({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Transaction History</CardTitle>
-        <div className="flex gap-4 mt-4">
+        <div className="flex gap-4">
           <Select value={institution} onValueChange={setInstitution}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select bank" />

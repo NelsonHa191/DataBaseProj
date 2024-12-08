@@ -12,9 +12,10 @@ export default async function Leaderboard() {
   }
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Leaderboard</h1>
-      <LeaderboardTable data={leaderboardData} />
+    <div className="flex flex-col gap-4 p-4 pt-0">
+      <div className="rounded-xl bg-muted/50 lg:min-h-min px-6 py-5 sm:py-6 shadow outline outline-muted/70">
+        <LeaderboardTable data={leaderboardData} />
+      </div>
     </div>
   );
 }
@@ -88,9 +89,9 @@ async function fetchLeaderboardDataAction(supabase) {
             const newBalance = log.new_balance;
             const gainLoss = newBalance - oldBalance;
 
-            console.log(
-              `For user ${username}, transaction: newBalance=${newBalance}, oldBalance=${oldBalance}, gain/loss=${gainLoss}`
-            ); // Debug log
+            // console.log(
+            //   `For user ${username}, transaction: newBalance=${newBalance}, oldBalance=${oldBalance}, gain/loss=${gainLoss}`
+            // ); // Debug log
 
             return sum + gainLoss;
           }, 0);
@@ -106,12 +107,12 @@ async function fetchLeaderboardDataAction(supabase) {
           return count;
         }, 0);
 
-        console.log(
-          `Final total gain/loss for user ${username}: ${totalNetGainLoss}`
-        ); // Debug log
-        console.log(
-          `Total transactions for user ${username}: ${totalTransactions}`
-        ); // Debug log
+        // console.log(
+        //   `Final total gain/loss for user ${username}: ${totalNetGainLoss}`
+        // ); // Debug log
+        // console.log(
+        //   `Total transactions for user ${username}: ${totalTransactions}`
+        // ); // Debug log
 
         return { username, totalNetGainLoss, totalTransactions };
       })
@@ -122,8 +123,8 @@ async function fetchLeaderboardDataAction(supabase) {
       .filter(Boolean)
       .sort((a, b) => b.totalNetGainLoss - a.totalNetGainLoss);
 
-    console.log("Leaderboard data before sorting:", leaderboardData); // Debug log
-    console.log("Sorted leaderboard data:", sortedLeaderboardData); // Debug log
+    // console.log("Leaderboard data before sorting:", leaderboardData); // Debug log
+    // console.log("Sorted leaderboard data:", sortedLeaderboardData); // Debug log
 
     return { data: sortedLeaderboardData, error: null };
   } catch (error) {

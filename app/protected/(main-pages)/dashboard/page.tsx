@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import TotalBalance from "@/components/TotalBalance";
 import Cashflow from "@/components/Cashflow";
 import AccountCarousel from "@/components/AccountCarousel";
+import { Transaction } from "@/types";
+import TransactionHistory from "@/components/TransactionHistory";
 
 export default async function Dashboard() {
   const supabase = await createClient();
@@ -27,9 +29,7 @@ export default async function Dashboard() {
   );
   let totalMoneyIn = 0.0;
   for (let i = 0; i < moneyIn.length; i++) {
-    totalMoneyIn += parseFloat(
-      (moneyIn[i].new_balance - moneyIn[i].old_balance).toFixed(2)
-    );
+    totalMoneyIn += moneyIn[i].new_balance - moneyIn[i].old_balance;
   }
   // gets this month's outgoing money
   const { data: moneyOut, error: moneyOutError } = await supabase.rpc(
@@ -39,7 +39,7 @@ export default async function Dashboard() {
   let totalMoneyOut = 0.0;
   for (let i = 0; i < moneyOut.length; i++) {
     totalMoneyOut += Math.abs(
-      parseFloat((moneyOut[i].new_balance - moneyOut[i].old_balance).toFixed(2))
+      moneyOut[i].new_balance - moneyOut[i].old_balance
     );
   }
   // calculates this months cashflow
@@ -50,6 +50,24 @@ export default async function Dashboard() {
     "fetch_user_accounts",
     { u_id: user.id }
   );
+
+  const { data: transactions, error } = await supabase
+    .from("balance_log")
+    .select(
+      `
+      account_id,
+      created_at,
+      old_balance,
+      new_balance,
+      accounts!inner (
+        institution,
+        routing,
+        user_id
+      )
+    `
+    )
+    .eq("accounts.user_id", user.id)
+    .order("created_at", { ascending: false });
 
   return (
     <>
@@ -70,6 +88,10 @@ export default async function Dashboard() {
           <h1 className="text-black/80 leading-none tracking-tight">
             Recent transactions
           </h1>
+          <TransactionHistory
+            initialTransactions={transactions as Transaction[]}
+            userId={user.id}
+          />
         </div>
       </div>
     </>

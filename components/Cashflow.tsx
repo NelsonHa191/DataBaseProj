@@ -17,13 +17,13 @@ export default function Cashflow({ totalMoneyIn, totalMoneyOut, cashflow }: { to
             />
             <div className="flex flex-row mt-auto text-sm">
               <p className="">
-                ${totalMoneyIn}{" "}
+                ${totalMoneyIn.toFixed(2)}{" "}
                 <span className="text-green-500">
                   in <ArrowUp size={10} className="inline-block" />
                 </span>
               </p>
               <p className="ml-auto">
-                ${totalMoneyOut}{" "}
+                ${totalMoneyOut.toFixed(2)}{" "}
                 <span className="text-red-500">
                   out <ArrowDown size={10} className="inline-block" />
                 </span>

@@ -39,7 +39,7 @@ export default function TransferMoneyDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full mt-4">
+        <Button variant="default" className="mt-auto">
           Transfer
         </Button>
       </DialogTrigger>
