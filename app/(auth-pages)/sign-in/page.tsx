@@ -12,7 +12,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
       <div className="flex min-h-screen w-full max-w-[420px] flex-col justify-center gap-2 py-10">
         <h1 className="text-2xl font-medium">Sign in</h1>
         <p className="text-sm text-foreground">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             className="text-foreground font-medium underline"
             href="/sign-up"

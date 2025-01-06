@@ -1,4 +1,3 @@
-// components/TransferMoneyDialog.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -17,22 +16,13 @@ import { transferMoneyAction } from "../actions/actions";
 import { Label } from "@/components/ui/label";
 import { SubmitButton } from "@/components/submit-button";
 import { Account } from "@/types";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface TransferMoneyDialogProps {
   fromAccount: Account;
-  accounts: Account[];
 }
 
 export default function TransferMoneyDialog({
   fromAccount,
-  accounts,
 }: TransferMoneyDialogProps) {
   const [toRoutingNumber, setToRoutingNumber] = useState("");
 

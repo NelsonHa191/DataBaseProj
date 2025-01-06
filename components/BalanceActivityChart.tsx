@@ -35,7 +35,6 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BalanceActivityChart({ accounts }: { accounts: Account[] }) {
-  const [timeRange, setTimeRange] = React.useState("90d");
   const [currentChart, setCurrentChart] = React.useState(accounts[0].id);
   const [chartData, setChartData] = React.useState<chartDataProps[]>([]);
   useEffect(() => {

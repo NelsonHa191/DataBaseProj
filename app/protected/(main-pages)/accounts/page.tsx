@@ -18,12 +18,19 @@ export default async function Accounts() {
     u_id: user.id,
   });
 
+  if (error) {
+    // Handle the error appropriately
+    console.error("Failed to fetch accounts:", error.message);
+    // Maybe show an error state or return an error component
+    return <div>Failed to load accounts</div>;
+  }
+
   return (
     <>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
         <div className="grid auto-rows-min gap-4 lg:grid-cols-3 grid-cols-1">
           {account?.map((acc: Account) => (
-            <AccountCard acc={acc} key={acc.id}/>
+            <AccountCard acc={acc} key={acc.id} />
           ))}
           <div className="min-h-[300px] space-y-2 flex justify-center items-center flex-col rounded-xl bg-transparent shadow outline outline-muted/70">
             <h1 className="text-black/80 leading-none tracking-tight">

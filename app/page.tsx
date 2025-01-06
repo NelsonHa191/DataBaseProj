@@ -11,6 +11,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const HomePage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -184,10 +185,13 @@ const HomePage = () => {
             </div>
             <div className="relative">
               <div className="aspect-square bg-gradient-to-br from-gray-300 to-gray-900 rounded-2xl overflow-hidden">
-                <img
+                <Image
                   src="/card.jpg"
                   alt="Premium Card"
+                  width={500}
+                  height={500}
                   className="w-full h-full object-cover mix-blend-overlay"
+                  priority
                 />
               </div>
             </div>

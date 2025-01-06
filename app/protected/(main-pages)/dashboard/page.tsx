@@ -22,26 +22,45 @@ export default async function Dashboard() {
     { u_id: user.id }
   );
 
+  if (totalBalanceError) {
+    console.error("Failed to fetch total balance:", totalBalanceError.message);
+    return <div className="p-4">Failed to load balance information</div>;
+  }
+
   // gets this month's incoming money
   const { data: moneyIn, error: moneyInError } = await supabase.rpc(
     "fetch_money_in",
     { u_id: user.id }
   );
+
+  if (moneyInError) {
+    console.error("Failed to fetch money in:", moneyInError.message);
+    return <div className="p-4">Failed to load income information</div>;
+  }
+
   let totalMoneyIn = 0.0;
   for (let i = 0; i < moneyIn.length; i++) {
     totalMoneyIn += moneyIn[i].new_balance - moneyIn[i].old_balance;
   }
+
   // gets this month's outgoing money
   const { data: moneyOut, error: moneyOutError } = await supabase.rpc(
     "fetch_money_out",
     { u_id: user.id }
   );
+
+  if (moneyOutError) {
+    console.error("Failed to fetch money out:", moneyOutError.message);
+    return <div className="p-4">Failed to load expense information</div>;
+  }
+
   let totalMoneyOut = 0.0;
   for (let i = 0; i < moneyOut.length; i++) {
     totalMoneyOut += Math.abs(
       moneyOut[i].new_balance - moneyOut[i].old_balance
     );
   }
+
   // calculates this months cashflow
   const cashflow = totalMoneyIn - totalMoneyOut;
 
@@ -50,6 +69,11 @@ export default async function Dashboard() {
     "fetch_user_accounts",
     { u_id: user.id }
   );
+
+  if (accountError) {
+    console.error("Failed to fetch accounts:", accountError.message);
+    return <div className="p-4">Failed to load account information</div>;
+  }
 
   const { data: transactions, error } = await supabase
     .from("balance_log")
@@ -68,6 +92,11 @@ export default async function Dashboard() {
     )
     .eq("accounts.user_id", user.id)
     .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch transactions:", error.message);
+    return <div className="p-4">Failed to load transaction history</div>;
+  }
 
   return (
     <>

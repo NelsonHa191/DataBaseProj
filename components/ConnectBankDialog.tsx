@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
 import React from "react";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
-  import { Button } from "@/components/ui/button";
-  import { Input } from "@/components/ui/input";
-  import { connectBankAction } from "../actions/actions";
-  import { Label } from "@/components/ui/label";
-  import { SubmitButton } from "@/components/submit-button";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { connectBankAction } from "../actions/actions";
+import { Label } from "@/components/ui/label";
+import { SubmitButton } from "@/components/submit-button";
 
 export default function ConnectBankDialog() {
   return (
@@ -27,7 +27,7 @@ export default function ConnectBankDialog() {
           <DialogTitle>Connect your banking account</DialogTitle>
           <DialogDescription>
             Enter your bank account information here. Click connect bank when
-            you're finished.
+            you&apos;re finished.
           </DialogDescription>
         </DialogHeader>
 
