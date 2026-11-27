@@ -79,7 +79,7 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
+              <Link href="/home">
                 <div className="flex aspect-square size-6 items-center justify-center rounded-lg text-sidebar-primary-foreground">
                   <Eclipse
                     className="size-6 text-sidebar-primary"

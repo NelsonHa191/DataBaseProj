@@ -11,7 +11,7 @@ export type chartDataProps = {
 }
 
 export type Account = {
-  id: int;
+  id: number;
   user_id: string;
   created_at: string;
   routing: string;
@@ -21,19 +21,20 @@ export type Account = {
 };
 
 export type BalanceLog = {
-  account_id: int;
+  account_id: number;
   created_at: string;
-  old_balance: number;
+  old_balance: number | null;
   new_balance: number;
 };
 
 export type LeaderboardUser = {
   username: string;
   totalNetGainLoss: number;
+  isYou?: boolean;
 };
 
 export interface Transaction {
-  account_id: string;
+  account_id: number;
   created_at: string;
   old_balance: number | null;
   new_balance: number;

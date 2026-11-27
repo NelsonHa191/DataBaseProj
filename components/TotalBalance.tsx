@@ -5,7 +5,7 @@ import AnimatedCounter from './AnimatedCounter'
 import { ArrowDown, ArrowUp } from 'lucide-react'
 
 export default function TotalBalance({ totalBalance, cashflow }: { totalBalance: number, cashflow: number }) {
-  const lastMonthTotal = parseFloat((totalBalance + Math.abs(cashflow)).toFixed(2));
+  const lastMonthTotal = totalBalance - cashflow;
 
   return (
     <div className="flex flex-col h-full min-h-[180px] rounded-xl bg-muted/50 px-6 py-5 sm:py-6 shadow outline outline-muted/70">
@@ -16,7 +16,7 @@ export default function TotalBalance({ totalBalance, cashflow }: { totalBalance:
     <h2 className="text-sm text-muted-foreground mt-auto">
       vs{" "}
       <span className="text-black/80">
-        ${lastMonthTotal}
+        ${lastMonthTotal.toFixed(2)}
       </span>{" "}
       last month{" "}
       {lastMonthTotal <= totalBalance ? (

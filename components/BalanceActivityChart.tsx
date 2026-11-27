@@ -24,8 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { getAccountChartAction } from "@/actions/actions";
-import { Suspense, useEffect } from "react";
+import { useDemo } from "@/components/DemoProvider";
 
 const chartConfig = {
   desktop: {
@@ -35,20 +34,18 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BalanceActivityChart({ accounts }: { accounts: Account[] }) {
-  const [currentChart, setCurrentChart] = React.useState(accounts[0].id);
-  const [chartData, setChartData] = React.useState<chartDataProps[]>([]);
-  useEffect(() => {
-    getAccountChartAction(currentChart).then(setChartData);
-  }, [currentChart]);
+  const { logs } = useDemo();
+  const [currentChart, setCurrentChart] = React.useState(String(accounts[0]?.id ?? ""));
 
-  // const chartData = [
-  //   {date: "2024-01-01", balance: 121},
-  //   {date: "2024-02-01", balance: 2424},
-  //   {date: "2024-03-01", balance: 3434},
-  //   {date: "2024-04-01", balance: 232},
-  //   {date: "2024-05-01", balance: 5455},
-  //   {date: "2024-06-01", balance: 55},
-  // ]
+  // balance after each change, for the last 3 months
+  const chartData = React.useMemo<chartDataProps[]>(() => {
+    const cutoff = new Date();
+    cutoff.setMonth(cutoff.getMonth() - 3);
+    return logs
+      .filter((l) => String(l.account_id) === currentChart && new Date(l.created_at) >= cutoff)
+      .sort((a, b) => a.created_at.localeCompare(b.created_at))
+      .map((l) => ({ date: l.created_at, balance: l.new_balance }));
+  }, [logs, currentChart]);
 
   return (
     <Card>
@@ -68,14 +65,13 @@ export function BalanceActivityChart({ accounts }: { accounts: Account[] }) {
           </SelectTrigger>
           <SelectContent className="rounded-xl">
             {accounts.map((acc: Account) => (
-              <SelectItem key={acc.id} value={acc.id} className="rounded-lg">
+              <SelectItem key={acc.id} value={String(acc.id)} className="rounded-lg">
                 {acc.institution} {acc.type}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </CardHeader>
-      <Suspense fallback="Loading...">
         <CardContent className="px-2 pt-4 sm:pr-6 sm:pt-6">
           <ChartContainer
             config={chartConfig}
@@ -135,7 +131,6 @@ export function BalanceActivityChart({ accounts }: { accounts: Account[] }) {
             </AreaChart>
           </ChartContainer>
         </CardContent>
-      </Suspense>
     </Card>
   );
 }

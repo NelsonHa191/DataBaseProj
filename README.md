@@ -2,6 +2,10 @@
 
 A modern banking WebApp that allows users to connect multiple bank account and have access to many features.
 
+> ⚠️ **This is now a demo.** The original Supabase database has been shut down, so the database features no longer work against real data. Opening the site takes you straight to the dashboard, already signed in, with generated sample data. (The original landing page is still available at `/home`.) You can still transfer money, connect accounts and filter transactions, but nothing is saved, and refreshing the page (or the ↺ button in the header) resets everything.
+>
+> The **original Supabase code is kept in [`legacy-supabase/`](legacy-supabase/)**. It isn't used by the app, but it's there to show how the real backend worked, along with instructions to bring it back if needed.
+
 ## Functions
 
 - **Cash Flow Function**
@@ -42,7 +46,9 @@ A modern banking WebApp that allows users to connect multiple bank account and h
   - Lucide React for icons
 
 - **Backend**
-  - PostgreSQL database hosted by Supabase
+  - Originally a PostgreSQL database hosted by Supabase (schema below, kept for reference)
+  - Now an in-memory demo store (`components/DemoProvider.tsx`, `lib/demo-data.ts`)
+  - Original database code: [`legacy-supabase/`](legacy-supabase/)
 
 ## Prerequisites
 
@@ -65,12 +71,7 @@ cd DataBaseProj
 npm install
 ```
 
-3. Set up environment variables:
-
-Edit `.env.local` file with your configuration.
-For Database - Check '.env.local' details within the essay turned in.
-
-4. Start the development server:
+3. Start the development server:
 ```bash
 npm run dev
 ```
@@ -81,6 +82,8 @@ npm run dev
 actions/
 ├── action.ts          # Performs backend functions
 app/
+├── page.tsx           # Redirects straight to the demo dashboard
+├── home/              # Original landing page (kept, reachable at /home)
 ├── (auth-pages)/
 │   ├── sign-in        # Authenticated pages for Sign in
 │   ├── sign-up        # And Sign up
@@ -89,6 +92,8 @@ app/
 │   ├── onboarding     # Where the onboarding page and function is
 components/            # Provides a lot of front end components
 public/                # Images
+lib/demo-data.ts       # Generated sample data for demo mode
+legacy-supabase/       # Original Supabase-backed code (not built, kept for reference)
 ```
 
 ## Available Scripts

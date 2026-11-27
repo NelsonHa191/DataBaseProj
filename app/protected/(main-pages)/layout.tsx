@@ -1,39 +1,23 @@
+"use client";
+
 import { AppSidebar } from "@/components/app-sidebar";
 import MainPageHeader from "@/components/MainPageHeader";
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { useDemo } from "@/components/DemoProvider";
+import DemoNotice from "@/components/DemoNotice";
 import React from "react";
 
-export default async function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    return redirect("/sign-in");
-  }
-
-  const userInfo = {
-    first_name: user.user_metadata.first_name,
-    last_name: user.user_metadata.last_name,
-    email: user.email!,
-    username: user.user_metadata.username,
-  };
-
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const { user } = useDemo();
 
   return (
     <SidebarProvider>
-      <AppSidebar userInfo={userInfo} />
-      <SidebarInset>
-        <MainPageHeader first_name={userInfo.first_name} />
+      <AppSidebar userInfo={user} />
+      <SidebarInset className="min-w-0">
+        <MainPageHeader first_name={user.first_name} />
+        <div className="px-4 pb-4">
+          <DemoNotice />
+        </div>
         {children}
       </SidebarInset>
     </SidebarProvider>

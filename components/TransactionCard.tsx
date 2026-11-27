@@ -17,7 +17,7 @@ export default function TransactionCard({
       <h2 className="text-black/80 leading-none tracking-tight">
         {account?.institution} - {account?.type}
       </h2>
-      <p className="text-black/60">Old Balance: ${tx.old_balance.toFixed(2)}</p>
+      <p className="text-black/60">Old Balance: ${tx.old_balance?.toFixed(2) ?? "—"}</p>
       <p className="text-black/60">New Balance: ${tx.new_balance.toFixed(2)}</p>
       <p className="text-black/60">
         Date: {new Date(tx.created_at).toLocaleDateString()}
