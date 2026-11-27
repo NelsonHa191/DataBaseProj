@@ -53,6 +53,9 @@ const HomePage = () => {
               <a href="#" className="text-sm text-gray-300 hover:text-white">
                 Security
               </a>
+              <Link href="/protected/about" className="text-sm text-gray-300 hover:text-white">
+                About
+              </Link>
               <Link href="/protected/dashboard">
                 <Button
                   variant="ghost"
@@ -94,6 +97,9 @@ const HomePage = () => {
           <a href="#" className="block text-lg text-gray-300">
             Security
           </a>
+          <Link href="/protected/about" className="block text-lg text-gray-300">
+            About
+          </Link>
           <Link href="/protected/dashboard" className="block">
             <Button className="w-full">Try the demo</Button>
           </Link>

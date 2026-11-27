@@ -8,6 +8,7 @@ import {
   CreditCard,
   Eclipse,
   ChartNoAxesColumn,
+  Info,
 } from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
@@ -68,6 +69,17 @@ export function AppSidebar({
             title: "Leaderboard",
             url: "leaderboard",
             icon: ChartNoAxesColumn,
+          },
+        ],
+      },
+      {
+        title: "Project",
+        url: "",
+        items: [
+          {
+            title: "About this project",
+            url: "about",
+            icon: Info,
           },
         ],
       },

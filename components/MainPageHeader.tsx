@@ -12,6 +12,7 @@ const titles: Record<string, string> = {
   "/protected/transfer-money": "Transfer money",
   "/protected/accounts": "Your accounts",
   "/protected/leaderboard": "Leaderboard",
+  "/protected/about": "About this project",
 };
 
 export default function MainPageHeader({ first_name }: { first_name: string }) {
